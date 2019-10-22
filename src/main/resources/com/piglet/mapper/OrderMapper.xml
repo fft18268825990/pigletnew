@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.piglet.mapper.OrderMapper">
+    <delete id="removeAll">
+        truncate table t_order;
+        truncate table month_result;
+    </delete>
+    <insert id="monthResult">
+        INSERT into month_result(
+        sum_amount,
+        sum_profit,
+        onemonth_amount,
+        onemonth_profit,
+        onethreemonth_amount,
+        onethreemonth_profit,
+        threesixmonth_amount,
+        threesixmonth_profit,
+        halfyearmonth_amount,
+        halfyearmonth_profit,
+        yearmonth_amount,
+        yearmonth_profit,
+        realname
+        )SELECT IFNULL(temp1.sum_amount,0) as sum_amount,
+        IFNULL(temp1.sum_profit,0) as sum_profit,
+        IFNULL(temp2.amount,0) as onemonth_amount,
+        IFNULL(temp2.profit,0) as onemonth_profit,
+        IFNULL(temp3.amount,0) as onethreemonth_amount,
+        IFNULL(temp3.profit,0) as onethreemonth_profit,
+        IFNULL(temp4.amount,0) as threesixmonth_amount,
+        IFNULL(temp4.profit,0) as threesixmonth_profit,
+        IFNULL(temp5.amount,0) as halfyearmonth_amount,
+        IFNULL(temp5.profit,0) as halfyearmonth_profit,
+        IFNULL(temp6.amount,0) as yearmonth_amount,
+        IFNULL(temp6.profit,0) as yearmonth_profit,
+        temp1.realname
+        FROM
+        (select SUM(o.amount) as sum_amount,SUM(o.profit) as sum_profit,u.realname as realname
+        from user u
+        left join product p on u.user_id = p.create_person
+        left join t_order o on p.sku = o.sku
+        where PERIOD_DIFF(date_format(now( ),'%Y%m'),date_format(p.create_time,'%Y%m')) &gt;=  1
+        GROUP BY u.realname) temp1
+        left join
+        (select SUM(o.amount) as amount,SUM(o.profit) as profit,u.realname as realname
+        from user u
+        left join product p on u.user_id = p.create_person
+        left join t_order o on p.sku = o.sku
+        where PERIOD_DIFF(date_format(now( ),'%Y%m'),date_format(p.create_time,'%Y%m')) = 1
+        GROUP BY u.realname) temp2 on temp1.realname = temp2.realname
+        left join
+        (select SUM(o.amount) as amount,SUM(o.profit) as profit,u.realname as realname
+        from user u
+        left join product p on u.user_id = p.create_person
+        left join t_order o on p.sku = o.sku
+        where PERIOD_DIFF(date_format(now( ),'%Y%m'),date_format(p.create_time,'%Y%m')) &gt; 1 and
+        PERIOD_DIFF(date_format(now( ),'%Y%m'),date_format(p.create_time,'%Y%m')) &lt; 5
+        GROUP BY u.realname) temp3 on temp1.realname = temp3.realname
+        left join
+        (select SUM(o.amount) as amount,SUM(o.profit) as profit,u.realname as realname
+        from user u
+        left join product p on u.user_id = p.create_person
+        left join t_order o on p.sku = o.sku
+        where PERIOD_DIFF(date_format(now( ),'%Y%m'),date_format(p.create_time,'%Y%m')) &gt; 4 and
+        PERIOD_DIFF(date_format(now( ),'%Y%m'),date_format(p.create_time,'%Y%m')) &lt; 8
+        GROUP BY u.realname) temp4 on temp1.realname = temp4.realname
+        left join
+        (select SUM(o.amount) as amount,SUM(o.profit) as profit,u.realname as realname
+        from user u
+        left join product p on u.user_id = p.create_person
+        left join t_order o on p.sku = o.sku
+        where PERIOD_DIFF(date_format(now( ),'%Y%m'),date_format(p.create_time,'%Y%m')) &gt; 7 and
+        PERIOD_DIFF(date_format(now( ),'%Y%m'),date_format(p.create_time,'%Y%m')) &lt; 14
+        GROUP BY u.realname) temp5 on temp1.realname = temp5.realname
+        left join
+        (select SUM(o.amount) as amount,SUM(o.profit) as profit,u.realname as realname
+        from user u
+        left join product p on u.user_id = p.create_person
+        left join t_order o on p.sku = o.sku
+        where PERIOD_DIFF(date_format(now( ),'%Y%m'),date_format(p.create_time,'%Y%m')) &gt; 13
+        GROUP BY u.realname) temp6 on temp1.realname = temp6.realname
+    </insert>
+    <select id="monthResultList" resultType="java.util.Map">
+          select u.realname as realname,IFNULL(mr.sum_amount,0) as sum_amount,
+        IFNULL(mr.sum_profit,0) as sum_profit,
+        IFNULL(mr.onemonth_amount,0) as onemonth_amount,
+        IFNULL(mr.onemonth_profit,0) as onemonth_profit,
+        IFNULL(mr.onethreemonth_amount,0) as onethreemonth_amount,
+        IFNULL(mr.onethreemonth_profit,0) as onethreemonth_profit,
+        IFNULL(mr.threesixmonth_amount,0) as threesixmonth_amount,
+        IFNULL(mr.threesixmonth_profit,0) as threesixmonth_profit,
+        IFNULL(mr.halfyearmonth_amount,0) as halfyearmonth_amount,
+        IFNULL(mr.halfyearmonth_profit,0) as halfyearmonth_profit,
+        IFNULL(mr.yearmonth_amount,0) as yearmonth_amount,
+        IFNULL(mr.yearmonth_profit,0) as yearmonth_profit from user u
+          left join month_result mr on mr.realname = u.realname
+          where u.del_flag = 0
+    </select>
+    <select id="resultCount" resultType="java.lang.Integer">
+    select COUNT(*) from bak_order
+    </select>
+    <select id="chengbiaoCount" resultType="java.lang.Integer">
+        select count(*) from bak_order
+    </select>
+    <select id="chengbiaoList" resultType="java.util.Map">
+        select * from bak_order
+        <if test="offset != null and limit != null">
+            limit ${offset}, ${limit}
+        </if>
+    </select>
+    <select id="chengbiaoRecords" resultType="java.util.Map">
+        select * from bak_order
+    </select>
+    <select id="errorCount" resultType="java.lang.Integer">
+        select count(*) from dianxiaomi_error
+    </select>
+    <select id="errorList" resultType="java.util.Map">
+        select * from dianxiaomi_error
+        <if test="offset != null and limit != null">
+            limit ${offset}, ${limit}
+        </if>
+    </select>
+
+    <select id="freightList" resultType="com.piglet.domain.Freight">
+        select * from freight
+    </select>
+    <delete id="removeDianxiaomi">
+        truncate table dianxiaomi;
+    </delete>
+    <delete id="removeFreight">
+       truncate table freight;
+    </delete>
+    <delete id="removeOrderAmount">
+        truncate table order_amount;
+    </delete>
+    
+    <insert id="saveDianxiaomi" parameterType="com.piglet.domain.Dianxiaomi" useGeneratedKeys="true" keyProperty="dxmId">
+        INSERT INTO dianxiaomi (order_no,express_no,cost,express_mode,price,sku,count,country,order_amount) values (#{orderNo},#{expressNo},#{cost},#{expressMode},#{price},#{sku},#{count},#{country},#{orderAmount})
+    </insert>
+
+    <insert id="saveFreight" parameterType="com.piglet.domain.Freight" useGeneratedKeys="true" keyProperty="freightId">
+        INSERT INTO freight (express_no,amount) values (#{expressNo},#{amount})
+    </insert>
+
+    <update id="truncateAll">
+        truncate table dianxiaomi;
+        truncate table dianxiaomi_error;
+        truncate table express_cost;
+        truncate table express_price;
+        TRUNCATE TABLE freight;
+        TRUNCATE TABLE freight_sum;
+        truncate table mooe;
+        truncate table oome;
+        truncate table oooe;
+        truncate table order_amount;
+        truncate table order_cost;
+        truncate table order_freight;
+        truncate table order_price;
+        truncate table month_result;
+        truncate table bak_order;
+        truncate table t_order;
+    </update>
+
+    <select id="zeroOrder" resultType="java.lang.String">
+select order_no from (select order_no,order_amount from dianxiaomi GROUP BY order_no,order_amount) d where order_no in (select t.order_no from (SELECT order_no,order_amount FROM dianxiaomi GROUP BY order_no,order_amount) t GROUP BY t.order_no HAVING count(t.order_no) = 1) and order_amount = 0.00
+    </select>
+
+    <select id="mome" resultType="java.util.Map">
+        select order_no,express_no from (select order_no,express_no from dianxiaomi d group by order_no,express_no) d where d.order_no in (select order_no from (select order_no,express_no from dianxiaomi group by order_no,express_no) t GROUP BY t.order_no having count(t.order_no)>1) and d.express_no in (select express_no from (select order_no,express_no from dianxiaomi group by order_no,express_no) t GROUP BY t.express_no having count(t.express_no)>1);
+    </select>
+
+    <insert id="insertDEByOrderNo" parameterType="java.lang.String">
+        INSERT INTO dianxiaomi_error (dxm_id,order_no,express_no,cost,express_mode,price,sku,count,country,order_amount,remark)select d.*,#{remark} as remark from dianxiaomi d where order_no = #{orderNo}
+    </insert>
+
+    <delete id="deleteDXMByOrderNo">
+        DELETE FROM dianxiaomi where order_no = #{orderNo}
+    </delete>
+
+    <insert id="insertDEByExpressNo" parameterType="java.lang.String">
+        INSERT INTO dianxiaomi_error (dxm_id,order_no,express_no,cost,express_mode,price,sku,count,country,order_amount,remark)select d.*,#{remark} as remark from dianxiaomi d where express_no = #{expressNo}
+    </insert>
+
+    <delete id="deleteDXMByExpressNo">
+        DELETE FROM dianxiaomi where express_no = #{expressNo}
+    </delete>
+
+    <insert id="insertPartTable">
+        INSERT INTO oome(id,order_no,express_no,all_cost,price,sku)
+        select dxm_id,order_no,express_no,cost,price*count as price,sku from dianxiaomi where order_no in (select order_no from (select order_no,express_no from dianxiaomi group by order_no,express_no) t GROUP BY t.order_no having count(t.order_no)>1);
+
+        INSERT INTO mooe(id,order_no,express_no,all_cost,price,sku)
+        select dxm_id,order_no,express_no,cost,price*count as price,sku from dianxiaomi where express_no in (select express_no from (select order_no,express_no from dianxiaomi group by order_no,express_no) t GROUP BY t.express_no having count(t.express_no)>1);
+
+        INSERT INTO oooe(id,order_no,express_no,all_cost,price,sku)
+        select dxm_id,order_no,express_no,cost,price*count as price,sku from dianxiaomi where order_no in (select order_no from (select order_no,express_no from dianxiaomi d group by order_no,express_no) d where d.order_no in (select order_no from (select order_no,express_no from dianxiaomi group by order_no,express_no) t GROUP BY t.order_no having count(t.order_no)=1) and d.express_no in (select express_no from (select order_no,express_no from dianxiaomi group by order_no,express_no) t GROUP BY t.express_no having count(t.express_no)=1));
+    </insert>
+
+    <update id="truncatePartTable">
+        truncate table mooe;
+        truncate table oome;
+        truncate table oooe;
+    </update>
+
+    <select id="oomeCost" resultType="java.lang.String">
+        select t.order_no FROM (select order_no,all_cost from (SELECT order_no,all_cost FROM `oome` GROUP BY order_no,all_cost) d where order_no in (select t.order_no from (SELECT order_no,all_cost FROM `oome` GROUP BY order_no,all_cost) t GROUP BY t.order_no HAVING count(t.order_no) = 1) and all_cost is null) t;
+    </select>
+
+    <select id="mooeCost" resultType="java.lang.String">
+        select t.express_no FROM (select express_no,all_cost from (SELECT express_no,all_cost FROM `mooe` GROUP BY express_no,all_cost) d where express_no in (select t.express_no from (SELECT express_no,all_cost FROM `mooe` GROUP BY express_no,all_cost) t GROUP BY t.express_no HAVING count(t.express_no) = 1) and all_cost is null) t;
+    </select>
+
+    <select id="oooeCost" resultType="java.lang.String">
+        select t.order_no FROM (select order_no,all_cost from (SELECT order_no,all_cost FROM `oooe` GROUP BY order_no,all_cost) d where order_no in (select t.order_no from (SELECT order_no,all_cost FROM `oooe` GROUP BY order_no,all_cost) t GROUP BY t.order_no HAVING count(t.order_no) = 1) and all_cost is null) t;
+    </select>
+
+    <select id="noFreight" resultType="java.lang.String">
+        select d.express_no from dianxiaomi d left join freight f on d.express_no = f.express_no where freight_id is NULL GROUP BY d.express_no
+    </select>
+
+    <insert id="insertFreightSum">
+        INSERT INTO freight_sum (express_no,amount)select express_no,sum(amount) as amount from freight GROUP BY express_no
+    </insert>
+
+    <insert id="insertOrderFreight">
+        INSERT into order_freight (order_no,amount)select oa.order_no,sum(oa.amount) from (select t.order_no,t.express_no,f.amount from (select order_no,express_no from dianxiaomi d group by order_no,express_no) t left join freight_sum f on t.express_no = f.express_no) oa group by oa.order_no
+    </insert>
+
+    <insert id="insertOrderAmount">
+        insert into order_amount (order_no,total_amount)select order_no,order_amount from dianxiaomi GROUP BY order_no,order_amount having order_amount != 0.00
+    </insert>
+
+    <insert id="insertExpressCost">
+        INSERT INTO express_cost (express_no,total_cost) SELECT express_no,all_cost FROM `mooe` GROUP BY express_no,all_cost HAVING all_cost is not NULL AND all_cost != 0.00;
+    </insert>
+
+    <insert id="insertOrderCost">
+        INSERT INTO order_cost (order_no,total_cost) SELECT t.order_no,t.all_cost FROM ( SELECT order_no,all_cost FROM `oome` UNION ALL SELECT order_no,all_cost FROM oooe) t GROUP BY order_no,all_cost HAVING all_cost is not NULL AND all_cost != 0.00;
+    </insert>
+
+    <insert id="insertExpressPrice">
+        INSERT into order_price(order_no,total_price)select order_no,sum(price*count) as total_price from dianxiaomi group by order_no;
+    </insert>
+
+    <insert id="insertOrderPrice">
+        INSERT into express_price(express_no,total_price)select express_no,sum(price*count) as total_price from dianxiaomi group by express_no;
+    </insert>
+
+    <update id="mooeCalculation">
+        update mooe e
+LEFT JOIN express_cost ec on e.express_no = ec.express_no
+LEFT JOIN order_amount oa on e.order_no = oa.order_no
+LEFT JOIN express_price ep on e.express_no = ep.express_no
+LEFT JOIN order_price op on e.order_no = op.order_no
+LEFT JOIN freight_sum f on e.express_no = f.express_no
+set e.this_cost = e.price/ep.total_price*ec.total_cost,
+e.this_price = e.price/op.total_price*oa.total_amount,
+e.this_expresscost = e.price/ep.total_price*f.amount
+    </update>
+
+    <update id="oomeCalculation">
+update oome o
+LEFT JOIN order_cost oc on o.order_no = oc.order_no
+LEFT JOIN order_amount oa on o.order_no = oa.order_no
+LEFT JOIN express_price ep on o.express_no = ep.express_no
+LEFT JOIN order_price op on o.order_no = op.order_no
+LEFT JOIN order_freight f on o.order_no = f.order_no
+set o.this_cost = o.price/op.total_price*oc.total_cost,
+o.this_price = o.price/op.total_price*oa.total_amount,
+o.this_expresscost = o.price/op.total_price*f.amount
+    </update>
+
+    <update id="oooeCalculation">
+update oooe o
+LEFT JOIN order_cost oc on o.order_no = oc.order_no
+LEFT JOIN order_amount oa on o.order_no = oa.order_no
+LEFT JOIN express_price ep on o.express_no = ep.express_no
+LEFT JOIN order_price op on o.order_no = op.order_no
+LEFT JOIN freight_sum f on o.express_no = f.express_no
+set o.this_cost = o.price/op.total_price*oc.total_cost,
+o.this_price = o.price/op.total_price*oa.total_amount,
+o.this_expresscost = o.price/ep.total_price*f.amount;
+    </update>
+
+    <update id="profitCalculation">
+        UPDATE mooe
+left join sys_param sp on 1 = 1
+SET profit = FLOOR(this_price*sp.param_value*0.92*100-this_cost*100-this_expresscost*100)/100
+where sp.param_name = 'exchange_rate';
+
+UPDATE oome
+left join sys_param sp on 1 = 1
+SET profit = FLOOR(this_price*sp.param_value*0.92*100-this_cost*100-this_expresscost*100)/100
+where sp.param_name = 'exchange_rate';
+
+UPDATE oooe
+left join sys_param sp on 1 = 1
+SET profit = FLOOR(this_price*sp.param_value*0.92*100-this_cost*100-this_expresscost*100)/100
+where sp.param_name = 'exchange_rate'
+    </update>
+
+    <insert id="insertBakOrder">
+        insert into bak_order (id,order_no,sku,cost,express_cost,order_amount,actual_amount,profit,express_no,express_mode,country)select t.id,t.order_no,t.sku,t.this_cost as cost,t.this_expresscost as express_cost,t.this_price as order_amount,t.this_price*0.92 as actual_amount,t.profit,t.express_no,d.express_mode,d.country from (select * from mooe union all select * from oome union all select * from oooe) t LEFT JOIN dianxiaomi d on t.id = d.dxm_id order by t.id
+    </insert>
+
+    <insert id="insertOrder">
+        insert into t_order (sku,amount,profit) select sku,actual_amount,profit from bak_order
+    </insert>
+    
+    <update id="saveRate" parameterType="java.util.Map">
+        update sys_param set param_value = #{exchangeRate} where param_name = 'exchange_rate'
+    </update>
+</mapper>
