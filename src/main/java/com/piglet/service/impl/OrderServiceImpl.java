@@ -49,8 +49,7 @@ public class OrderServiceImpl implements OrderService {
                         orderMapper.insert(order);
                     }
                 }
-                orderMapper.monthResult();
-                List<Map<String, Object>> resultList = orderMapper.monthResultList();
+                List<Map<String, Object>> resultList = orderMapper.monthResult("");
                 String content = "";
                 for (Map<String, Object> map : resultList) {
                     content += map.get("realname") + "：{一月内：（金额：" + map.get("onemonth_amount") + "元，利润：" + map.get("onemonth_profit") + "美元），" +
@@ -179,7 +178,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Map<String, Object>> resultList() {
-        return orderMapper.monthResultList();
+        return orderMapper.monthResult("");
     }
 
     @Transactional(readOnly = false,rollbackFor = Exception.class)
@@ -199,8 +198,8 @@ public class OrderServiceImpl implements OrderService {
             orderMapper.profitCalculation();//计算利润，小数点第三位向下取整
             orderMapper.insertBakOrder();//将有用信息插入一张表中
             orderMapper.insertOrder();
-            orderMapper.monthResult();
-            List<Map<String, Object>> resultList = orderMapper.monthResultList();
+            orderMapper.monthResult("");
+            List<Map<String, Object>> resultList = orderMapper.monthResult("");
             String content = "";
             for (Map<String, Object> map : resultList) {
                 content += map.get("realname") + "：{一月内：（金额：" + map.get("onemonth_amount") + "元，利润：" + map.get("onemonth_profit") + "美元），" +
@@ -271,5 +270,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<Map<String, Object>> chengbiaoRecords() {
         return orderMapper.chengbiaoRecords();
+    }
+
+    @Override
+    public List<Map<String, Object>> resultListByUser(String userflag) {
+        return orderMapper.monthResult(userflag);
     }
 }

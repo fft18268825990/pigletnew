@@ -32,6 +32,25 @@
             <div class="layui-row layui-col-space15">
                 <div class="layui-col-md12">
                     <div class="layui-card">
+
+                        <div class="layui-card-body ">
+                            <div class="layui-form layui-col-space5">
+                                <div class="layui-inline layui-show-xs-block layui-col-xs2">
+                                    <select id="userflag" name="userflag" class="form-control" >
+                                        <option value=""></option>
+                                        <option value="meigong">美工</option>
+                                        <option value="paipin">排品</option>
+                                        <option value="shangchuan">上传</option>
+                                        <option value="kaifa">开发</option>
+                                    </select>
+                                </div>
+                                <div class="layui-inline layui-show-xs-block">
+                                    <button class="layui-btn"  lay-submit="" lay-filter="sreach" onclick="loadTable();"><i class="layui-icon">&#xe615;</i></button>
+                                </div>
+                            </div>
+                            <button type='button' style="display: none" id='import'></button>
+                        </div>
+
                         <button type="button" style="display: none" id="excel"></button>
 
                         <div class="layui-card-body ">

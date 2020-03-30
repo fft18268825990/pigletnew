@@ -15,8 +15,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public List<User> userList(Map<String, Object> params) {
-        if((String)params.get("page")!=null && (String)params.get("page")!=""
-                &&(String)params.get("limit")!=null && (String)params.get("limit")!="") {
+        if(params.get("page")!=null && params.get("limit")!=null) {
             int page = Integer.parseInt((String) params.get("page"));
             int limit = Integer.parseInt((String) params.get("limit"));
             params.put("offset", (page - 1 )* limit);

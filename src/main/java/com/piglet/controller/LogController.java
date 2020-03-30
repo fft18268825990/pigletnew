@@ -15,21 +15,21 @@ public class LogController {
     LogService logService;
 
     @RequestMapping("/resultLog")
-    public String resultLog(){
+    public String resultLog() {
         return "result-log";
     }
 
     @GetMapping("/logList")
     @ResponseBody
-    public PageUtil logList(@RequestParam Map<String, Object> params){
-        return new PageUtil("0","返回成功",logService.logCount(),logService.logList(params));
+    public PageUtil logList(@RequestParam Map<String, Object> params) {
+        return new PageUtil("0", "返回成功", logService.logCount(), logService.logList(params));
     }
 
     @PostMapping("/editLog")
     @ResponseBody
-    public Result editLog(@RequestParam Map<String, Object> params){
-        String logId = (String)params.get("logId");
-        if(logId==null || logId=="") {
+    public Result editLog(@RequestParam Map<String, Object> params) {
+        String logId = (String) params.get("logId");
+        if (logId == null || logId == "") {
             return Result.error();
         }
         if (logService.edit(params) > 0) {

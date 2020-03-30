@@ -69,8 +69,14 @@ public class OrderController {
 
     @GetMapping(value = "/resultList")
     @ResponseBody
-    public PageUtil resultList() throws Exception {
-        return new PageUtil("0","返回成功",orderService.resultCount(),orderService.resultList());
+    public PageUtil resultList(@RequestParam Map<String, Object> params) throws Exception {
+        String userflag = (String)params.get("userflag");
+        if(userflag == "" || userflag == null){
+            return new PageUtil("0","返回成功",orderService.resultCount(),orderService.resultList());
+        }else{
+            List<Map<String, Object>> list = orderService.resultListByUser(userflag);
+            return new PageUtil("0","返回成功",list.size(),list);
+        }
     }
 
     @GetMapping(value = "/chengbiao")

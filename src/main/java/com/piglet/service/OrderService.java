@@ -29,4 +29,6 @@ public interface OrderService {
     int saveRate(Map<String, Object> params);
 
     List<Map<String, Object>> chengbiaoRecords();
+
+    List<Map<String,Object>> resultListByUser(String userflag);
 }

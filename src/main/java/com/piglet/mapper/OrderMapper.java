@@ -15,7 +15,7 @@ import java.util.Map;
 public interface OrderMapper extends BaseMapper<Order> {
     void removeAll();
 
-    void monthResult();
+    List<Map<String,Object>> monthResult(@Param(value="userflag")String userflag);
 
     List<Map<String,Object>> monthResultList();
 

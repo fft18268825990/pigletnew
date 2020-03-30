@@ -16,6 +16,10 @@ public class Product implements Serializable {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
     private Integer createPerson;
+    private Integer paipin;
+    private Integer meigong;
+    private Integer kaifa;
+    private Integer shangchuan;
     private Integer delFlag;
 
     public Integer getProductId() {
@@ -56,5 +60,37 @@ public class Product implements Serializable {
 
     public void setDelFlag(Integer delFlag) {
         this.delFlag = delFlag;
+    }
+
+    public Integer getPaipin() {
+        return paipin;
+    }
+
+    public void setPaipin(Integer paipin) {
+        this.paipin = paipin;
+    }
+
+    public Integer getMeigong() {
+        return meigong;
+    }
+
+    public void setMeigong(Integer meigong) {
+        this.meigong = meigong;
+    }
+
+    public Integer getKaifa() {
+        return kaifa;
+    }
+
+    public void setKaifa(Integer kaifa) {
+        this.kaifa = kaifa;
+    }
+
+    public Integer getShangchuan() {
+        return shangchuan;
+    }
+
+    public void setShangchuan(Integer shangchuan) {
+        this.shangchuan = shangchuan;
     }
 }

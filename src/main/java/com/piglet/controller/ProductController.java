@@ -10,11 +10,14 @@ import com.piglet.util.ShiroUtils;
 import org.apache.shiro.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.piglet.util.ShiroUtils.getUserId;
@@ -33,11 +36,15 @@ public class ProductController {
     }
 
     @RequestMapping("/proAdd")
-    public String productAdd(){
+    public String productAdd(Model model){
+        List list = userService.userList(new HashMap<String,Object>());
+        model.addAttribute("USERLIST",list);
         return "/product-add";
     }
     @RequestMapping("/proEdit")
-    public String productEdit(){
+    public String productEdit(Model model){
+        List list = userService.userList(new HashMap<String,Object>());
+        model.addAttribute("USERLIST",list);
         return "/product-edit";
     }
 
@@ -60,6 +67,10 @@ public class ProductController {
         product.setSku((String)params.get("sku"));
         product.setCreateTime(new Date());
         product.setCreatePerson(getUserId());
+        product.setKaifa(Integer.parseInt((String)params.get("kaifa")));
+        product.setMeigong(Integer.parseInt((String)params.get("meigong")));
+        product.setShangchuan(Integer.parseInt((String)params.get("shangchuan")));
+        product.setPaipin(Integer.parseInt((String)params.get("paipin")));
         product.setDelFlag(0);
         if (productService.save(product) > 0) {
             return Result.ok();

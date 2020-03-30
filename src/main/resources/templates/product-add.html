@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="x-admin-sm">
+<html class="x-admin-sm" lang="zh_CN" xmlns:th="http://www.thymeleaf.org">
     
     <head>
         <meta charset="UTF-8">
@@ -31,7 +31,43 @@
                           <input type="text" id="sku" name="sku"
                           autocomplete="off" class="layui-input">
                       </div>
+                      <label for="shangchuan" class="layui-form-label">
+                          <span class="x-red">*</span>上传
+                      </label>
+                      <div class="layui-input-inline">
+                          <select id="shangchuan" name="shangchuan" class="form-control" >
+                              <option th:each="users:${USERLIST}"   th:value="${users.userId}" th:text="${users.realname}"></option>
+                          </select>
+                      </div>
                   </div>
+                    <div class="layui-form-item">
+                        <label for="meigong" class="layui-form-label">
+                            <span class="x-red">*</span>美工
+                        </label>
+                        <div class="layui-input-inline">
+                            <select id="meigong" name="meigong" class="form-control">
+                                <option th:each="users:${USERLIST}"   th:value="${users.userId}" th:text="${users.realname}"></option>
+                            </select>
+                        </div>
+                        <label for="paipin" class="layui-form-label">
+                            <span class="x-red">*</span>排品
+                        </label>
+                        <div class="layui-input-inline">
+                            <select id="paipin" name="paipin" class="form-control" >
+                                <option th:each="users:${USERLIST}"   th:value="${users.userId}" th:text="${users.realname}"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="kaifa" class="layui-form-label">
+                            <span class="x-red">*</span>开发
+                        </label>
+                        <div class="layui-input-inline">
+                            <select id="kaifa" name="kaifa" class="form-control" >
+                                <option th:each="users:${USERLIST}"   th:value="${users.userId}" th:text="${users.realname}"></option>
+                            </select>
+                        </div>
+                    </div>
                   <div class="layui-form-item">
 
                       <button id="savebtn" class="layui-btn" type="submit">
@@ -99,7 +135,7 @@
                     $.ajax({
                         type : "GET",
                         url : "/proSelectCount",
-                        data : {sku : $('#sku').val()},
+                        data : {sku:$('#sku').val()},
                         async : false,
                         success : function(data) {
                             flag = data>0;
@@ -111,11 +147,23 @@
 
 
 
-                validator = $("#signupForm").validate({
+                    validator = $("#signupForm").validate({
                     rules : {
                         sku : {
                             required : true,
                             skuIsCreated : true
+                        },
+                        shangchuan : {
+                            required : true
+                        },
+                        meigong : {
+                            required : true
+                        },
+                        paipin : {
+                            required : true
+                        },
+                        kaifa : {
+                            required : true
                         }
                     },
                     messages : {

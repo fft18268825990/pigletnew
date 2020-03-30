@@ -59,9 +59,13 @@ function loadTable(){
         ,cols: [[ //表头
             {type:'radio'}
             ,{field: 'productId', title: 'ID', width:'5%', sort: true}
-            ,{field: 'sku', title: 'sku', width:'40%'}
-            ,{field: 'createPerson', title: '创建人', width: '20.9%'}
-            ,{field: 'createTime', title: '创建日期', width: '30%', sort: true,
+            ,{field: 'sku', title: '产品Id', width:'15%'}
+            ,{field: 'shangchuanName', title: '上传', width: '10%'}
+            ,{field: 'paipinName', title: '排品', width: '10%'}
+            ,{field: 'meigongName', title: '美工', width: '10%'}
+            ,{field: 'kaifaName', title: '开发', width: '10%'}
+            ,{field: 'createPerson', title: '创建人', width: '10%'}
+            ,{field: 'createTime', title: '创建日期', width: '15%', sort: true,
                 templet:function(d){
                     return util.toDateString(d.createTime);
                 }}
@@ -116,7 +120,7 @@ function loadTable(){
 function openAdd(){
     layer.open({
         type: 2,
-        area: ['600px', '200px'],
+        area: ['700px', '500px'],
         fix: false, //不固定
         maxmin: true,
         shadeClose: false,
@@ -128,7 +132,7 @@ function openAdd(){
 function openEdit(rowdata){
     layer.open({
         type: 2,
-        area: ['600px', '400px'],
+        area: ['700px', '500px'],
         fix: false, //不固定
         maxmin: true,
         shadeClose: false,
