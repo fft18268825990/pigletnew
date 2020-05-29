@@ -7,9 +7,21 @@
         p.sku as sku,
         p.create_person as userId,
         u.realname as createPerson,
+        p.meigong as meigong,
+        um.realname as meigongName,
+        p.kaifa as kaifa,
+        uk.realname as kaifaName,
+        p.shangchuan as shangchuan,
+        us.realname as shangchuanName,
+        p.paipin as paipin,
+        up.realname as paipinName,
         p.create_time as createTime
         FROM product p
         LEFT JOIN user u on u.user_id = p.create_person
+        LEFT JOIN user um on um.user_id = p.meigong
+        LEFT JOIN user uk on uk.user_id = p.kaifa
+        LEFT JOIN user us on us.user_id = p.shangchuan
+        LEFT JOIN user up on up.user_id = p.paipin
         <where>
             p.del_flag = 0
             <if test="sku!=null and sku!=''">and p.sku like CONCAT('%',#{sku},'%')</if>
@@ -42,7 +54,7 @@
     </select>
     <update id="edit" parameterType="java.util.Map">
         update product p set
-        <if test="flag == 'editPro'">p.sku = #{sku}</if>
+        <if test="flag == 'editPro'">p.sku = #{sku},p.meigong = #{meigong},p.kaifa = #{kaifa},p.paipin = #{paipin},p.shangchuan = #{shangchuan}</if>
         <if test="flag == 'delPro'">p.del_flag = 1</if>
         where p.product_id = #{productId}
     </update>

@@ -4,13 +4,14 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.piglet.domain.Menu;
 import com.piglet.domain.RoleMenu;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
 
 @Mapper
 public interface MenuMapper extends BaseMapper<Menu> {
-    List<String> listPerms(Integer userId);
+    List<String> listPerms(@Param("userId") Integer userId);
 
     List<Menu> listMenuByUserId(Map<String, Object> params);
 

@@ -4,6 +4,8 @@ import com.piglet.domain.Freight;
 import com.piglet.service.OrderService;
 import com.piglet.util.PageUtil;
 import com.piglet.util.Result;
+import com.piglet.util.ShiroUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +24,7 @@ public class OrderController {
 
     @RequestMapping("/excelResult")
     public String excelResult(){
+        ShiroUtils.isPermitted("order:excelResult");
         return "excel-result";
     }
 
