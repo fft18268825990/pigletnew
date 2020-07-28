@@ -19,7 +19,8 @@
         IFNULL(temp5.profit,0) as halfyearmonth_profit,
         IFNULL(temp6.amount,0) as yearmonth_amount,
         IFNULL(temp6.profit,0) as yearmonth_profit,
-        u.realname
+        temp9.RATE as rate,
+        u.realname as realname
         FROM user u
         left join
         (select SUM(o.amount) as sum_amount,SUM(o.profit) as sum_profit,u.realname as realname
@@ -90,6 +91,14 @@
         left join t_order o on p.sku = o.sku
         where PERIOD_DIFF(date_format(now( ),'%Y%m'),date_format(p.create_time,'%Y%m')) &gt; 13
         GROUP BY u.realname) temp6 on u.realname = temp6.realname
+        left JOIN
+        (SELECT u.realname,IFNULL(TEMP8.COUNT,0)/TEMP7.ALL_COUNT AS RATE FROM
+        (SELECT P.KAIFA,COUNT(1) AS ALL_COUNT FROM PRODUCT P WHERE DEL_FLAG = '0' GROUP BY P.KAIFA) TEMP7
+        LEFT JOIN (
+        SELECT P.KAIFA,COUNT(1) AS COUNT FROM (SELECT DISTINCT(SKU) FROM T_ORDER) O
+        LEFT JOIN PRODUCT P ON O.SKU = P.SKU AND P.DEL_FLAG = '0'
+        GROUP BY P.KAIFA) TEMP8 ON TEMP7.KAIFA = TEMP8.KAIFA
+        LEFT JOIN USER U ON U.user_id = TEMP7.KAIFA) temp9 on u.realname = temp9.realname
         where u.del_flag = 0
     </select>
     <select id="monthResultList" resultType="java.util.Map">

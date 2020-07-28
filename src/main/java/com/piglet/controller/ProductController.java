@@ -101,6 +101,7 @@ public class ProductController {
                 productService.importExcel(is,originalFilename,getUserId());
                 return Result.ok();
             } catch (Exception e) {
+                e.printStackTrace();
                 return Result.error();
             }
         }else return Result.error();

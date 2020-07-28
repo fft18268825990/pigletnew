@@ -12,7 +12,7 @@ logging:
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1/piglet?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true
+    url: jdbc:mysql://127.0.0.1:3306/piglet?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true
     username: root
     password: root
     initialSize: 10

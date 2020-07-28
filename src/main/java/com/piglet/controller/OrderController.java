@@ -24,7 +24,6 @@ public class OrderController {
 
     @RequestMapping("/excelResult")
     public String excelResult(){
-        ShiroUtils.isPermitted("order:excelResult");
         return "excel-result";
     }
 

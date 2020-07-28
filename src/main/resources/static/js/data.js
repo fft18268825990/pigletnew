@@ -55,6 +55,7 @@ function loadTable(){
             , {field: 'halfyearmonth_profit', width:'7%',title: '6~12月利润￥'}
             , {field: 'yearmonth_amount', width:'7%',title: '12月前金额$'}
             , {field: 'yearmonth_profit', width:'7%',title: '12月前利润￥'}
+            , {field: 'rate', width:'7%',title: '动销率'}
             , {field: 'realname', width:'7%',title: '姓名'}
         ]],
         where:{

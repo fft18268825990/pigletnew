@@ -63,6 +63,10 @@ public class ProductServiceImpl implements ProductService{
             if(row.get(0).toString()!=null && !"".equals(row.get(0).toString())) {
                 Product product = new Product();
                 product.setSku(row.get(0).toString());
+                product.setPaipin(Integer.parseInt(row.get(1).toString()));
+                product.setKaifa(Integer.parseInt(row.get(2).toString()));
+                product.setMeigong(Integer.parseInt(row.get(3).toString()));
+                product.setShangchuan(Integer.parseInt(row.get(4).toString()));
                 product.setCreatePerson(userId);
                 product.setCreateTime(new Date());
                 product.setDelFlag(0);
