@@ -64,6 +64,7 @@ function loadTable(){
             ,{field: 'paipinName', title: '排品', width: '10%'}
             ,{field: 'meigongName', title: '美工', width: '10%'}
             ,{field: 'kaifaName', title: '开发', width: '10%'}
+            ,{field: 'yunyingName',title: '运营',width: '10%'}
             ,{field: 'createPerson', title: '创建人', width: '10%'}
             ,{field: 'createTime', title: '创建日期', width: '15%', sort: true,
                 templet:function(d){

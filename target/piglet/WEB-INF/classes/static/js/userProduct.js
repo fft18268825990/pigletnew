@@ -30,7 +30,8 @@ function loadTable() {
         ]]
         , where: {
             startTime: $('#startTime').val(),
-            endTime: $('#endTime').val()
+            endTime: $('#endTime').val(),
+            userflag : $('#userflag').val()
         }
     });
 }

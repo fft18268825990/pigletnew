@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="x-admin-sm">
+<html class="x-admin-sm" lang="zh_CN" xmlns:th="http://www.thymeleaf.org">
     
     <head>
         <meta charset="UTF-8">
@@ -23,19 +23,62 @@
         <div class="layui-fluid">
             <div class="layui-row">
                 <form id="signupForm" class="layui-form">
-                  <div class="layui-form-item">
-                      <input type="hidden" id="productId" name="productId">
-                      <input type="hidden" id="flag" name="flag" value="editPro">
-                      <div class="layui-form-item">
-                          <label for="sku" class="layui-form-label">
-                              <span class="x-red">*</span>sku
-                          </label>
-                          <div class="layui-input-inline">
-                              <input type="text" id="sku" name="sku"
-                                     autocomplete="off" class="layui-input">
-                          </div>
-                      </div>
-                  </div>
+                    <input type="hidden" id="productId" name="productId">
+                    <input type="hidden" id="flag" name="flag" value="editPro">
+                    <div class="layui-form-item">
+                        <label for="sku" class="layui-form-label">
+                            <span class="x-red">*</span>sku
+                        </label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="sku" name="sku"
+                                   autocomplete="off" class="layui-input">
+                        </div>
+                        <label for="shangchuan" class="layui-form-label">
+                            <span class="x-red">*</span>上传
+                        </label>
+                        <div class="layui-input-inline">
+                            <select id="shangchuan" name="shangchuan" class="form-control" >
+                                <option th:each="users:${USERLIST}"   th:value="${users.userId}" th:text="${users.realname}"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="meigong" class="layui-form-label">
+                            <span class="x-red">*</span>美工
+                        </label>
+                        <div class="layui-input-inline">
+                            <select id="meigong" name="meigong" class="form-control">
+                                <option th:each="users:${USERLIST}"   th:value="${users.userId}" th:text="${users.realname}"></option>
+                            </select>
+                        </div>
+                        <label for="paipin" class="layui-form-label">
+                            <span class="x-red">*</span>排品
+                        </label>
+                        <div class="layui-input-inline">
+                            <select id="paipin" name="paipin" class="form-control" >
+                                <option th:each="users:${USERLIST}"   th:value="${users.userId}" th:text="${users.realname}"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="kaifa" class="layui-form-label">
+                            <span class="x-red">*</span>开发
+                        </label>
+                        <div class="layui-input-inline">
+                            <select id="kaifa" name="kaifa" class="form-control" >
+                                <option th:each="users:${USERLIST}"   th:value="${users.userId}" th:text="${users.realname}"></option>
+                            </select>
+                        </div>
+                        <label for="yunying" class="layui-form-label">
+                            <span class="x-red">*</span>运营
+                        </label>
+                        <div class="layui-input-inline">
+                            <select id="yunying" name="yunying" class="form-control" >
+                                <option></option>
+                                <option th:each="users:${USERLIST}"   th:value="${users.userId}" th:text="${users.realname}"></option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="layui-form-item">
 
                         <button id="savebtn" class="layui-btn" type="submit">
@@ -49,15 +92,17 @@
                             重置
                         </button>
                     </div>
-              </form>
+                </form>
             </div>
         </div>
         <script>
             var validator;
             var layer;
+            var form;
 
-            layui.use('layer', function() {
+            layui.use(['form', 'layer'], function() {
                 layer = layui.layer;
+                form = layui.form;
                 validateRule();
                 child();
             });
@@ -135,6 +180,12 @@
             function child(rowdata){
                 $('#productId').val(rowdata.productId);
                 $('#sku').val(rowdata.sku);
+                $('#meigong').val(rowdata.meigong);
+                $('#shangchuan').val(rowdata.shangchuan)
+                $('#paipin').val(rowdata.paipin)
+                $('#kaifa').val(rowdata.kaifa);
+                $('#yunying').val(rowdata.yunying);
+                form.render();
             }
         </script>
     </body>

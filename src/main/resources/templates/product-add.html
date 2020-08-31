@@ -67,6 +67,16 @@
                                 <option th:each="users:${USERLIST}"   th:value="${users.userId}" th:text="${users.realname}"></option>
                             </select>
                         </div>
+
+                        <label for="yunying" class="layui-form-label">
+                            <span class="x-red">*</span>运营
+                        </label>
+                        <div class="layui-input-inline">
+                            <select id="yunying" name="yunying" class="form-control" >
+                                <option></option>
+                                <option th:each="users:${USERLIST}"   th:value="${users.userId}" th:text="${users.realname}"></option>
+                            </select>
+                        </div>
                     </div>
                   <div class="layui-form-item">
 
@@ -163,6 +173,9 @@
                             required : true
                         },
                         kaifa : {
+                            required : true
+                        },
+                        yunying : {
                             required : true
                         }
                     },

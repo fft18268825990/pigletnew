@@ -1,6 +1,12 @@
 <component name="ArtifactManager">
   <artifact type="war" name="piglet-master:war">
     <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>piglet-master</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
     <root id="archive" name="piglet.war">
       <element id="artifact" artifact-name="piglet-master:war exploded" />
     </root>

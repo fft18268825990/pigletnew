@@ -57,4 +57,9 @@ public class UserServiceImpl implements UserService{
     public User findUserById(Integer userId) {
         return userMapper.selectById(userId);
     }
+
+    @Override
+    public void loginLog(Map<String, Object> loginLog) {
+        userMapper.loginLog(loginLog);
+    }
 }

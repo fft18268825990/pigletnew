@@ -20,6 +20,7 @@ public class Product implements Serializable {
     private Integer meigong;
     private Integer kaifa;
     private Integer shangchuan;
+    private Integer yunying;
     private Integer delFlag;
 
     public Integer getProductId() {
@@ -92,5 +93,13 @@ public class Product implements Serializable {
 
     public void setShangchuan(Integer shangchuan) {
         this.shangchuan = shangchuan;
+    }
+
+    public Integer getYunying() {
+        return yunying;
+    }
+
+    public void setYunying(Integer yunying) {
+        this.yunying = yunying;
     }
 }

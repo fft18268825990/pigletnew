@@ -23,4 +23,6 @@ public interface UserService {
     int icount(Integer userId);
 
     User findUserById (Integer userId);
+
+    void loginLog(Map<String, Object> loginLog);
 }

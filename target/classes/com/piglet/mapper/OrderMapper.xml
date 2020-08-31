@@ -6,22 +6,8 @@
         truncate table t_order;
         truncate table month_result;
     </delete>
-    <insert id="monthResult">
-        INSERT into month_result(
-        sum_amount,
-        sum_profit,
-        onemonth_amount,
-        onemonth_profit,
-        onethreemonth_amount,
-        onethreemonth_profit,
-        threesixmonth_amount,
-        threesixmonth_profit,
-        halfyearmonth_amount,
-        halfyearmonth_profit,
-        yearmonth_amount,
-        yearmonth_profit,
-        realname
-        )SELECT IFNULL(temp1.sum_amount,0) as sum_amount,
+    <select id="monthResult" resultType="java.util.Map" parameterType="java.lang.String">
+        SELECT IFNULL(temp1.sum_amount,0) as sum_amount,
         IFNULL(temp1.sum_profit,0) as sum_profit,
         IFNULL(temp2.amount,0) as onemonth_amount,
         IFNULL(temp2.profit,0) as onemonth_profit,
@@ -33,53 +19,88 @@
         IFNULL(temp5.profit,0) as halfyearmonth_profit,
         IFNULL(temp6.amount,0) as yearmonth_amount,
         IFNULL(temp6.profit,0) as yearmonth_profit,
-        temp1.realname
-        FROM
+        temp9.RATE as rate,
+        u.realname as realname
+        FROM user u
+        left join
         (select SUM(o.amount) as sum_amount,SUM(o.profit) as sum_profit,u.realname as realname
         from user u
-        left join product p on u.user_id = p.create_person
+        <if test="userflag == 'meigong'"> left join product p on u.user_id = p.meigong </if>
+        <if test="userflag == 'shangchuan'"> left join product p on u.user_id = p.shangchuan </if>
+        <if test="userflag == 'paipin'"> left join product p on u.user_id = p.paipin </if>
+        <if test="userflag == 'kaifa'"> left join product p on u.user_id = p.kaifa </if>
+        <if test="userflag == ''"> left join product p on u.user_id = p.create_person </if>
         left join t_order o on p.sku = o.sku
         where PERIOD_DIFF(date_format(now( ),'%Y%m'),date_format(p.create_time,'%Y%m')) &gt;=  1
-        GROUP BY u.realname) temp1
+        GROUP BY u.realname) temp1 on u.realname = temp1.realname
         left join
         (select SUM(o.amount) as amount,SUM(o.profit) as profit,u.realname as realname
         from user u
-        left join product p on u.user_id = p.create_person
+        <if test="userflag == 'meigong'"> left join product p on u.user_id = p.meigong </if>
+        <if test="userflag == 'shangchuan'"> left join product p on u.user_id = p.shangchuan </if>
+        <if test="userflag == 'paipin'"> left join product p on u.user_id = p.paipin </if>
+        <if test="userflag == 'kaifa'"> left join product p on u.user_id = p.kaifa </if>
+        <if test="userflag == ''"> left join product p on u.user_id = p.create_person </if>
         left join t_order o on p.sku = o.sku
         where PERIOD_DIFF(date_format(now( ),'%Y%m'),date_format(p.create_time,'%Y%m')) = 1
-        GROUP BY u.realname) temp2 on temp1.realname = temp2.realname
+        GROUP BY u.realname) temp2 on u.realname = temp2.realname
         left join
         (select SUM(o.amount) as amount,SUM(o.profit) as profit,u.realname as realname
         from user u
-        left join product p on u.user_id = p.create_person
+        <if test="userflag == 'meigong'"> left join product p on u.user_id = p.meigong </if>
+        <if test="userflag == 'shangchuan'"> left join product p on u.user_id = p.shangchuan </if>
+        <if test="userflag == 'paipin'"> left join product p on u.user_id = p.paipin </if>
+        <if test="userflag == 'kaifa'"> left join product p on u.user_id = p.kaifa </if>
+        <if test="userflag == ''"> left join product p on u.user_id = p.create_person </if>
         left join t_order o on p.sku = o.sku
         where PERIOD_DIFF(date_format(now( ),'%Y%m'),date_format(p.create_time,'%Y%m')) &gt; 1 and
         PERIOD_DIFF(date_format(now( ),'%Y%m'),date_format(p.create_time,'%Y%m')) &lt; 5
-        GROUP BY u.realname) temp3 on temp1.realname = temp3.realname
+        GROUP BY u.realname) temp3 on u.realname = temp3.realname
         left join
         (select SUM(o.amount) as amount,SUM(o.profit) as profit,u.realname as realname
         from user u
-        left join product p on u.user_id = p.create_person
+        <if test="userflag == 'meigong'"> left join product p on u.user_id = p.meigong </if>
+        <if test="userflag == 'shangchuan'"> left join product p on u.user_id = p.shangchuan </if>
+        <if test="userflag == 'paipin'"> left join product p on u.user_id = p.paipin </if>
+        <if test="userflag == 'kaifa'"> left join product p on u.user_id = p.kaifa </if>
+        <if test="userflag == ''"> left join product p on u.user_id = p.create_person </if>
         left join t_order o on p.sku = o.sku
         where PERIOD_DIFF(date_format(now( ),'%Y%m'),date_format(p.create_time,'%Y%m')) &gt; 4 and
         PERIOD_DIFF(date_format(now( ),'%Y%m'),date_format(p.create_time,'%Y%m')) &lt; 8
-        GROUP BY u.realname) temp4 on temp1.realname = temp4.realname
+        GROUP BY u.realname) temp4 on u.realname = temp4.realname
         left join
         (select SUM(o.amount) as amount,SUM(o.profit) as profit,u.realname as realname
         from user u
-        left join product p on u.user_id = p.create_person
+        <if test="userflag == 'meigong'"> left join product p on u.user_id = p.meigong </if>
+        <if test="userflag == 'shangchuan'"> left join product p on u.user_id = p.shangchuan </if>
+        <if test="userflag == 'paipin'"> left join product p on u.user_id = p.paipin </if>
+        <if test="userflag == 'kaifa'"> left join product p on u.user_id = p.kaifa </if>
+        <if test="userflag == ''"> left join product p on u.user_id = p.create_person </if>
         left join t_order o on p.sku = o.sku
         where PERIOD_DIFF(date_format(now( ),'%Y%m'),date_format(p.create_time,'%Y%m')) &gt; 7 and
         PERIOD_DIFF(date_format(now( ),'%Y%m'),date_format(p.create_time,'%Y%m')) &lt; 14
-        GROUP BY u.realname) temp5 on temp1.realname = temp5.realname
+        GROUP BY u.realname) temp5 on u.realname = temp5.realname
         left join
         (select SUM(o.amount) as amount,SUM(o.profit) as profit,u.realname as realname
         from user u
-        left join product p on u.user_id = p.create_person
+        <if test="userflag == 'meigong'"> left join product p on u.user_id = p.meigong </if>
+        <if test="userflag == 'shangchuan'"> left join product p on u.user_id = p.shangchuan </if>
+        <if test="userflag == 'paipin'"> left join product p on u.user_id = p.paipin </if>
+        <if test="userflag == 'kaifa'"> left join product p on u.user_id = p.kaifa </if>
+        <if test="userflag == ''"> left join product p on u.user_id = p.create_person </if>
         left join t_order o on p.sku = o.sku
         where PERIOD_DIFF(date_format(now( ),'%Y%m'),date_format(p.create_time,'%Y%m')) &gt; 13
-        GROUP BY u.realname) temp6 on temp1.realname = temp6.realname
-    </insert>
+        GROUP BY u.realname) temp6 on u.realname = temp6.realname
+        left JOIN
+        (SELECT u.realname,IFNULL(TEMP8.COUNT,0)/TEMP7.ALL_COUNT AS RATE FROM
+        (SELECT P.KAIFA,COUNT(1) AS ALL_COUNT FROM PRODUCT P WHERE DEL_FLAG = '0' GROUP BY P.KAIFA) TEMP7
+        LEFT JOIN (
+        SELECT P.KAIFA,COUNT(1) AS COUNT FROM (SELECT DISTINCT(SKU) FROM T_ORDER) O
+        LEFT JOIN PRODUCT P ON O.SKU = P.SKU AND P.DEL_FLAG = '0'
+        GROUP BY P.KAIFA) TEMP8 ON TEMP7.KAIFA = TEMP8.KAIFA
+        LEFT JOIN USER U ON U.user_id = TEMP7.KAIFA) temp9 on u.realname = temp9.realname
+        where u.del_flag = 0
+    </select>
     <select id="monthResultList" resultType="java.util.Map">
           select u.realname as realname,IFNULL(mr.sum_amount,0) as sum_amount,
         IFNULL(mr.sum_profit,0) as sum_profit,

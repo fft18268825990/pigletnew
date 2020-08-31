@@ -18,4 +18,6 @@ public interface UserMapper extends BaseMapper<User> {
     List<Map<String,Object>> countlist(Map<String, Object> params);
 
     int icount(Integer userId);
+
+    void loginLog(Map<String, Object> params);
 }

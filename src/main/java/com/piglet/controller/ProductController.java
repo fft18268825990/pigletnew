@@ -71,6 +71,7 @@ public class ProductController {
         product.setMeigong(Integer.parseInt((String)params.get("meigong")));
         product.setShangchuan(Integer.parseInt((String)params.get("shangchuan")));
         product.setPaipin(Integer.parseInt((String)params.get("paipin")));
+        product.setYunying(Integer.parseInt((String)params.get("yunying")));
         product.setDelFlag(0);
         if (productService.save(product) > 0) {
             return Result.ok();
